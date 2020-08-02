@@ -16,7 +16,7 @@ create_mainfest_file(){
     WSPATH=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)
     echo "Generating random WebSocket path:${WSPATH}"
     
-    cat >  ${SH_PATH}/IBMYes/v2ray-cloudfoundry/manifest.yml  << EOF
+    cat >  ${SH_PATH}/IBM/v2ray-cloudfoundry/manifest.yml  << EOF
     applications:
     - path: .
       name: ${IBM_APP_NAME}
@@ -24,7 +24,7 @@ create_mainfest_file(){
       memory: ${IBM_MEM_SIZE}M
 EOF
 
-    cat >  ${SH_PATH}/IBMYes/v2ray-cloudfoundry/v2ray/config.json  << EOF
+    cat >  ${SH_PATH}/IBM/v2ray-cloudfoundry/v2ray/config.json  << EOF
     {
         "inbounds": [
             {
@@ -60,7 +60,7 @@ EOF
 clone_repo(){
     echo "Initializing"
     git clone https://github.com/s6hay85/IBM
-    cd IBMYes
+    cd IBM
     git submodule update --init --recursive
     cd v2ray-cloudfoundry/v2ray
     # Upgrade V2Ray to the latest version
@@ -87,13 +87,13 @@ clone_repo(){
     rm latest-v2ray.zip
     
     chmod 0755 ./*
-    cd ${SH_PATH}/IBMYes/v2ray-cloudfoundry
+    cd ${SH_PATH}/IBM/v2ray-cloudfoundry
     echo "Initialization done"
 }
 
 install(){
     echo "Installing:"
-    cd ${SH_PATH}/IBMYes/v2ray-cloudfoundry
+    cd ${SH_PATH}/IBM/v2ray-cloudfoundry
     ibmcloud target --cf
     ibmcloud cf install
     ibmcloud cf push
@@ -103,8 +103,8 @@ install(){
     VMESSCODE=$(base64 -w 0 << EOF
     {
       "v": "2",
-      "ps": "ibmyes",
-      "add": "ibmyes.us-south.cf.appdomain.cloud",
+      "ps": "ibmtunnel",
+      "add": "ibmtunnel.us-south.cf.appdomain.cloud",
       "port": "443",
       "id": "${UUID}",
       "aid": "4",
